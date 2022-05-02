@@ -1,7 +1,7 @@
 # Cards 2 GUI
 ## The easy way to track your tickets!
-https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_display.png?raw=true
 
+<img src="https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_display.png?raw=true" alt="Cards 2 Display" title="Preview of GUI">
 
 ## use the issue tracker for bugs, please! (:
 # Due to security restrictions in windows 11
