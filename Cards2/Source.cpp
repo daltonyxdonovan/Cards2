@@ -18,7 +18,7 @@ const int WIDTH{ 960 };
 const int HEIGHT{ 1000 };
 int scrollbar{ 0 };
 int scrollbar_state{ 0 };
-int background_choice{ 9 };
+int background_choice{ 7 };
 int text_choice{ 8 };
 int scroll_speed{ 60 };
 int file_read_offset{ -1 };
@@ -217,22 +217,23 @@ int main()
 						stringstream str(line);
 						while (getline(str, word, '	'))
 							row.push_back(word);
-						if (row[1] == "CA")
-							ca.push_back(row);
-						else if (row[1] == "CO")
-							co.push_back(row);
-						else if (row[1] == "HC")
-							hc.push_back(row);
-						else if (row[1] == "HF")
-							hf.push_back(row);
-						else if (row[1] == "HA")
-							ha.push_back(row);
-						else if (row[1] == "AC")
-							ac.push_back(row);
-						else if (row[1] == "IT")
-							it.push_back(row);
-						else if (row[1] == "HP")
-							hp.push_back(row);
+							if (row[1] == "CA")
+								ca.push_back(row);
+							else if (row[1] == "CO")
+								co.push_back(row);
+							else if (row[1] == "HC")
+								hc.push_back(row);
+							else if (row[1] == "HF")
+								hf.push_back(row);
+							else if (row[1] == "HA")
+								ha.push_back(row);
+							else if (row[1] == "AC")
+								ac.push_back(row);
+							else if (row[1] == "IT")
+								it.push_back(row);
+							else if (row[1] == "HP")
+								hp.push_back(row);
+						
 						if (row[1] != "CO" && row[1] != "CL" && row[1] != "CA")
 						{
 							content.push_back(row);
@@ -1429,24 +1430,110 @@ int main()
 			Help_mark.setPosition(sf::Vector2f(878 + (card_square.getSize().x - Help_mark.getLocalBounds().width)/2, (card_square.getSize().y - Help_mark.getLocalBounds().height)/2));
 			window.draw(Help_mark);
 			
-			for (int l{ 1 }; l < 9; l++)
+			for (int l{ 1 }; l < 7; l++)
 			{
 				sf::Sprite Status_filter;
 				Status_filter.setTexture(card_square);
 				Status_filter.setPosition(sf::Vector2f(888, 20 + (card_square.getSize().y + 10)*l));
 				window.draw(Status_filter);
-				if (l == 4)
+				
+				sf::Text hc_text;
+				hc_text.setFont(cascadia);
+				hc_text.setString("HC");
+				hc_text.setCharacterSize(40);
+				hc_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center hc_text in Status_filter
+				hc_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - hc_text.getLocalBounds().width)/2, 115));
+				window.draw(hc_text);
+					
+				sf::Text hf_text;
+				hf_text.setFont(cascadia);
+				hf_text.setString("HF");
+				hf_text.setCharacterSize(40);
+				hf_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center hf_text in Status_filter
+				hf_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - hf_text.getLocalBounds().width)/2, 205));
+				window.draw(hf_text);
+				
+				sf::Text ha_text;
+				ha_text.setFont(cascadia);
+				ha_text.setString("HA");
+				ha_text.setCharacterSize(40);
+				ha_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center ha_text in Status_filter
+				ha_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - ha_text.getLocalBounds().width)/2, 295));
+				window.draw(ha_text);
+			/////////////////////////////////////////////////
+				sf::Text ac_text;
+				ac_text.setFont(cascadia);
+				ac_text.setString("AC");
+				ac_text.setCharacterSize(40);
+				ac_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center ca_text in Status_filter
+				ac_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - ac_text.getLocalBounds().width)/2, 385));
+				window.draw(ac_text);
+				
+				sf::Text it_text;
+				it_text.setFont(cascadia);
+				it_text.setString("IT");
+				it_text.setCharacterSize(40);
+				it_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center co_text in Status_filter
+				it_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - it_text.getLocalBounds().width)/2, 475));
+				window.draw(it_text);
+
+				sf::Text hp_text;
+				hp_text.setFont(cascadia);
+				hp_text.setString("HP");
+				hp_text.setCharacterSize(40);
+				hp_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+				//center hp_text in Status_filter
+				hp_text.setPosition(sf::Vector2f(880 + (card_square.getSize().x - hp_text.getLocalBounds().width)/2, 565));
+				window.draw(hp_text);
+				
+				//if left mouse button is pressed
+				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					sf::Text hc_text;
-					hc_text.setFont(cascadia);
-					hc_text.setString("HC");
-					hc_text.setCharacterSize(40);
-					hc_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
-					//center hc_text in Status_filter
-					hc_text.setPosition(sf::Vector2f(878 + (card_square.getSize().x - hc_text.getLocalBounds().width)/2, (card_square.getSize().y - hc_text.getLocalBounds().height)/2));
-					window.draw(hc_text);
+					//if mouse collides with hc_text
+					if (hc_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = hc;
+					}
+					//if mouse collides with hf_text
+					else if (hf_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = hf;
+					}
+					//if mouse collides with ha_text
+					else if (ha_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = ha;
+					}
+					
+					//if mouse collides with ac_text
+					else if (ac_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = ac;
+					}
+					//if mouse collides with it_text
+					else if (it_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = it;
+					}
+					//if mouse collides with hp_text
+					else if (hp_text.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+					{
+						content.clear();
+						content = hp;
+					}
 					
 				}
+				
 			}
 			
 			//event polling
