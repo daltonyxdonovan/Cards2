@@ -8,7 +8,7 @@
 # Due to security restrictions in windows 11
 
 in order to use this, it has to remain in the exact folder configuration provided. the
-Cards2 executable requires itself to be in the same folder as the includes folder,
+Cards2 executable requires itself to be in the same folder as the assets folder,
 and the .tab to be used is required to be in the folder with it. you can remove and replace
 the .tab at will. you are more than welcome to make a shortcut to it, but the .tab still has
 to be in the Cards2 folder. this is a requirement so it can work on anyone's pc
