@@ -20,7 +20,7 @@ int scrollbar{ 0 };
 int scrollbar_state{ 0 };
 int background_choice{ 9 };
 int text_choice{ 8 };
-int scroll_speed{ 30 };
+int scroll_speed{ 60 };
 int file_read_offset{ -1 };
 int tickers{ 0 };
 int time_offset{ 0 };
@@ -29,8 +29,9 @@ int mouse_lasty{ sf::Mouse::getPosition().y };
 
 bool running = true; 
 bool help = false;
-
-
+bool terminal_disabled{ false };
+bool help_clicked{ false };
+bool checking{ false };
 
 //vectors
 vector<int> red;
@@ -107,21 +108,24 @@ vector<vector<string>> washington;
 vector<vector<string>> wisconsin;
 vector<vector<string>> wyoming;
 vector<vector<string>> all_states;
+
+vector<vector<string>> ca;
+vector<vector<string>> co;
+vector<vector<string>> hc;
+vector<vector<string>> hf;
+vector<vector<string>> ha;
+vector<vector<string>> ac;
+vector<vector<string>> it;
+vector<vector<string>> hp;
+
 vector<string> states_list;
 vector<int> state_hovered;
 vector<int> card_xpos;
 vector<int> card_ypos;
 vector<int> checked;
-
 string fname;
 
 
-
-
-
-bool terminal_disabled{ false };
-bool help_clicked{ false };
-bool checking{ false };
 
 int main()
 {
@@ -159,7 +163,6 @@ int main()
 	if (running)
 	{
 		wchar_t filename[MAX_PATH];
-
 		OPENFILENAMEW ofn;
 		ZeroMemory(&filename, sizeof(filename));
 		ZeroMemory(&ofn, sizeof(ofn));
@@ -173,10 +176,7 @@ int main()
 
 		if (GetOpenFileNameW(&ofn))
 		{
-
 			fname = CW2A(filename);
-			Sleep(1000);
-
 		}
 		else
 		{
@@ -202,12 +202,6 @@ int main()
 			default: cout << "operation cancelled by user" << endl;
 			}
 		}
-		
-		
-
-		
-
-
 
 		fstream file(fname, ios::in);
 		if (file.is_open())
@@ -223,6 +217,22 @@ int main()
 						stringstream str(line);
 						while (getline(str, word, '	'))
 							row.push_back(word);
+						if (row[1] == "CA")
+							ca.push_back(row);
+						else if (row[1] == "CO")
+							co.push_back(row);
+						else if (row[1] == "HC")
+							hc.push_back(row);
+						else if (row[1] == "HF")
+							hf.push_back(row);
+						else if (row[1] == "HA")
+							ha.push_back(row);
+						else if (row[1] == "AC")
+							ac.push_back(row);
+						else if (row[1] == "IT")
+							it.push_back(row);
+						else if (row[1] == "HP")
+							hp.push_back(row);
 						if (row[1] != "CO" && row[1] != "CL" && row[1] != "CA")
 						{
 							content.push_back(row);
@@ -604,7 +614,6 @@ int main()
 			checked.push_back(0);
 		}
 		
-
 		//colors to use easily in a [0], [1], [2] fashion
 		red.push_back(244);
 		red.push_back(67);
@@ -662,8 +671,6 @@ int main()
 		gray_blue.push_back(125);
 		gray_blue.push_back(139);
 
-		
-
 		//image and font loading
 		if (!card_long.loadFromFile("assets/card.png"))
 		{
@@ -706,11 +713,9 @@ int main()
 			cout << "checkbox_collider.png has not been located. Are all the files in the correct location?" << endl;
 		}
 		
-
 		//look for events while the window is open
 		while (window.isOpen())
 		{
-			
 			//get mouse position and save it to vector mouse_pos
 			sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
 			
@@ -728,7 +733,6 @@ int main()
 				scrollbar_state = 0;
 			if (scrollbar_state < -1620)
 				scrollbar_state = -1620;
-
 
 	//much simpler theme styling than the other way (:
 			//background styling
@@ -939,25 +943,14 @@ int main()
 			if (text_choice > 13)
 				text_choice = 0;
 
-
-
-		
 			//clear the window with background color chosen
 			window.clear(sf::Color(background_color[0], background_color[1], background_color[2]));
 
-
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-
-
-
-
-
-			
 			//card loop begins
 			for (int i{ 0 }; i < content.size(); i++)
 			{
-				
 				Card.setTexture(card_long); //set texture to long card
 				Card.setPosition(sf::Vector2f(card_xpos[i], scrollbar + card_ypos[i])); //set position on scrollbar dynamically
 				window.draw(Card); //draw the card
@@ -1031,20 +1024,7 @@ int main()
 				checkbox_collide.setPosition(Card.getPosition().x + 5, Card.getPosition().y + 5);
 				window.draw(checkbox_collide);
 				
-				//if mouse intersects with checkbox_collide
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					if (checkbox_collide.getGlobalBounds().contains(mouse_pos.x, mouse_pos.y))
-					{
-						if (event.mouseButton.button == sf::Mouse::Left)
-						{
-							checked[i] = 1;
-							
-						}
-					}
-				}
-				
-				if (checked[i] == 1)
+				if (checked[i] == 1 && checking == true)
 				{
 					sf::RectangleShape checkmark_left;
 					sf::RectangleShape checkmark_right;
@@ -1058,14 +1038,14 @@ int main()
 					checkmark_right.setRotation(30);
 					window.draw(checkmark_left);
 					window.draw(checkmark_right);
-					int xpos_limit{ card_xpos[i] - 820 };
+					int xpos_limit{ -820 };
 					int ypos_limit{ card_ypos[i] - (i * 210 + 20) };
-
+					
 					time_offset += 1;
 					if (time_offset > 40)
 					{
 						card_xpos[i] -= 10;
-						if (card_xpos[i] < -820)
+						if (card_xpos[i] < xpos_limit && card_xpos[i] > -1040)
 						{
 							tickers += 1;
 							for (int j = i; j < card_ypos.size(); j++)
@@ -1078,19 +1058,18 @@ int main()
 							}
 							if (tickers == 21)
 							{
-
-								checked[i] = 0;
 								tickers = 0;
 								time_offset = 0;
+								checking = false;
 							}
 						}
 					}
-
-
-
-
 				}
-				
+				//if mouse intersects with checkbox_collide
+				if (event.mouseButton.button == sf::Mouse::Left && checkbox_collide.getGlobalBounds().contains(mouse_pos.x, mouse_pos.y))
+				{
+					checked[i] = 1;
+				}
 			}
 
 			//state picker loop begins
@@ -1450,10 +1429,26 @@ int main()
 			Help_mark.setPosition(sf::Vector2f(878 + (card_square.getSize().x - Help_mark.getLocalBounds().width)/2, (card_square.getSize().y - Help_mark.getLocalBounds().height)/2));
 			window.draw(Help_mark);
 			
+			for (int l{ 1 }; l < 9; l++)
+			{
+				sf::Sprite Status_filter;
+				Status_filter.setTexture(card_square);
+				Status_filter.setPosition(sf::Vector2f(888, 20 + (card_square.getSize().y + 10)*l));
+				window.draw(Status_filter);
+				if (l == 4)
+				{
+					sf::Text hc_text;
+					hc_text.setFont(cascadia);
+					hc_text.setString("HC");
+					hc_text.setCharacterSize(40);
+					hc_text.setFillColor(sf::Color(text_color[0],text_color[1],text_color[2]));
+					//center hc_text in Status_filter
+					hc_text.setPosition(sf::Vector2f(878 + (card_square.getSize().x - hc_text.getLocalBounds().width)/2, (card_square.getSize().y - hc_text.getLocalBounds().height)/2));
+					window.draw(hc_text);
+					
+				}
+			}
 			
-
-
-
 			//event polling
 			while (window.pollEvent(event))
 			{
@@ -1470,9 +1465,6 @@ int main()
 					{
 						cout << scrollbar_state << endl;
 					}
-
-
-
 					else if (event.key.code == sf::Keyboard::Up)
 						background_choice += 1;
 					else if (event.key.code == sf::Keyboard::Down)
@@ -1481,7 +1473,6 @@ int main()
 						text_choice -= 1;
 					else if (event.key.code == sf::Keyboard::Right)
 						text_choice += 1;
-
 				}
 				//if mouse is scrolled
 				if (event.type == sf::Event::MouseWheelScrolled)
@@ -1489,32 +1480,29 @@ int main()
 					if (event.mouseWheelScroll.delta > 0)
 						// if mouse x position is less than 750:
 						if (mouse_pos.x < 800)
-
-							scrollbar += scroll_speed;
+							scrollbar += scroll_speed * event.mouseWheelScroll.delta;
 						else if (mouse_pos.x > 800)
 						{
-							scrollbar_state += scroll_speed;
-
+							scrollbar_state += (scroll_speed * 3) * event.mouseWheelScroll.delta;
 						}
-
-
 					if (event.mouseWheelScroll.delta < 0)
 						if (mouse_pos.x < 800)
-							scrollbar -= scroll_speed;
+							scrollbar += scroll_speed * event.mouseWheelScroll.delta;
 						else if (mouse_pos.x > 800)
 						{
-							scrollbar_state -= scroll_speed;
-
+							scrollbar_state += (scroll_speed * 3) * event.mouseWheelScroll.delta;
 						}
-
 				}
 				// if left mouse button is pressed
 				if (event.type == sf::Event::MouseButtonPressed)
 				{
-					
 					if (event.mouseButton.button == sf::Mouse::Left)
 					{
-						
+						for (int i{ 0 }; i < content.size(); i++)
+						{
+							if (checked[i] == 1)
+								checking = true;
+						}
 						if (Help.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 						{
 							help_clicked = true;
@@ -1527,27 +1515,11 @@ int main()
 								help_clicked = false;
 							}
 						}
-
 					}
 				}
 			}
 
-
-
-
-
-
-
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
 
 			if (help)
 			{
@@ -1591,10 +1563,7 @@ int main()
 				leftright.setFillColor(sf::Color(10,10,10));
 				leftright.setPosition(sf::Vector2f(210, 755));
 				window.draw(leftright);
-
-				
 			}
-				
 			//draw the window
 			window.display();
 		}
