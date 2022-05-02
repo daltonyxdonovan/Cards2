@@ -3,6 +3,7 @@
 
 <img src="https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_display.png?raw=true" alt="Cards 2 Display" title="Preview of GUI">
 
+
 ## use the issue tracker for bugs, please! (:
 # Due to security restrictions in windows 11
 
@@ -24,7 +25,7 @@ that you download a strictly non-filtered .tab file from the maintech website, a
 the file in the same location as the executable. right outside the 'assets' folder.
 
 ## CONTROLS
-
+<img src="https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_info.png?raw=true" alt="Cards 2 Controls" title="Preview of GUI controls">
 the mouse can check off a card to dismiss it
 
 arrow keys can change the background and text color as well!
