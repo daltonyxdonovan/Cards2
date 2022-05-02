@@ -1,6 +1,6 @@
 # Cards 2 GUI
 ## The easy way to track your tickets!
-
+https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_display.png?raw=true
 
 
 ## use the issue tracker for bugs, please! (:
