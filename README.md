@@ -3,10 +3,6 @@
 
 <img src="https://github.com/daltonyxdonovan/Cards2/blob/master/cards2_display.png?raw=true" alt="Cards 2 Display" title="Preview of GUI">
 
-
-## use the issue tracker for bugs, please! (:
-# Due to security restrictions in windows 11
-
 in order to use this, it has to remain in the exact folder configuration provided. the
 Cards2 executable requires itself to be in the same folder as the assets folder,
 and the .tab to be used is required to be in the folder with it. you can remove and replace
