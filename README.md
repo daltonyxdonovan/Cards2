@@ -28,19 +28,14 @@ arrow keys can change the background and text color as well!
 
 the escape button exits the program
 
-## NOTES
 
-note: in the spirit of open source, and so there are no thoughts of viruses or anything, i've
-left the source code included. feel free to pick apart my spaghetti code
-
-# FAQ
-## MISSING REDIST
+## MISSING REDIST?
 if you encounter an error along the lines of "missing redistributable MSVC-xxxxxxxx", you are 
 missing a redistributable package from the microsoft website. super easy fix. just plug the 
 MSVC number in to google and go to the top microsoft website result and install the package.
 
-## BLANK COLORED SCREEN ON START
+## BLANK COLORED SCREEN ON START?
 if you encounter this, that means the files are either not in a place the application is
-allowed to touch, or they are in the wrong order. make a folder on your desktop, put the
+allowed to touch, or they are in the wrong order, directory wise. make a folder on your desktop, put the
 Cards2.exe and the entire 'assets' folder *inside* that folder. put your .tab *inside*
 that folder, run the application. that's all (:
